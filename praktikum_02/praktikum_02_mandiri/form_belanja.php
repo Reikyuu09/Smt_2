@@ -86,19 +86,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         return $harga;
     }
 
-    // function hargaBarang($produk){
-            
-    //         if (isset($_POST['produk']) && $_POST['produk'] == 'Television'){
-    //             $harga = 4200000;
-    //         }
-    //         if (isset($_POST['produk']) && $_POST['produk'] == 'Refrigerator'){
-    //             $harga = 3100000;
-    //         }
-    //         if (isset($_POST['produk']) && $_POST['produk'] == 'Washing Machine'){
-    //             $harga = 3800000;
-    //         }
-    //         return $harga;
-    //     }
     $totalHarga = hargaBarang($produk) * $jumlah;
 
 

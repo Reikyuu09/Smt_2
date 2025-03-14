@@ -33,28 +33,29 @@
             <label for="select" class="col-4 col-form-label">Mata Kuliah</label> 
             <div class="col-8">
             <select id="select" name="matkul" class="custom-select">
-                <option value="pweb2">PEMWEB 2</option>
-                <option value="basdat">BASIS DATA</option>
-                <option value="uiux">UI/UX</option>
+                <option disabled selected>Pilih Mata Kuliah</option>
+                <option value="Pemrograman Web 2">PEMWEB 2</option>
+                <option value="Basis Data">BASIS DATA</option>
+                <option value="UI/UX">UI/UX</option>
             </select>
             </div>
         </div>
         <div class="form-group row">
             <label for="nilai_uts" class="col-4 col-form-label">Nilai UTS</label> 
             <div class="col-8">
-            <input id="nilai_uts" name="nilai_uts" placeholder="Nilai UTS" type="text" class="form-control">
+            <input id="nilai_uts" name="nilai_uts" placeholder="Nilai UTS" type="number" class="form-control">
             </div>
         </div>
         <div class="form-group row">
             <label for="nilai_uas" class="col-4 col-form-label">Nilai UAS</label> 
             <div class="col-8">
-            <input id="nilai_uas" name="nilai_uas" placeholder="Nilai UAS" type="text" class="form-control">
+            <input id="nilai_uas" name="nilai_uas" placeholder="Nilai UAS" type="number" class="form-control">
             </div>
         </div>
         <div class="form-group row">
             <label for="nilai_praktikum" class="col-4 col-form-label">Nilai Tugas/Praktikum</label> 
             <div class="col-8">
-            <input id="nilai_praktikum" name="nilai_praktikum" placeholder="Nilai Tugas/Praktikum" type="text" class="form-control">
+            <input id="nilai_praktikum" name="nilai_praktikum" placeholder="Nilai Tugas/Praktikum" type="number" class="form-control">
             </div>
         </div> 
         <div class="form-group row">
@@ -67,77 +68,64 @@
 </div>
 <?php
 
-$proses = isset($_POST['proses']) ? $_POST['proses'] : "simpan";
-$nama = isset($_POST['nama']) ? $_POST['nama'] : "";
-$matkul = isset($_POST['matkul']) ? $_POST['matkul'] : "";
-$nilai_uts = isset($_POST['nilai_uts']) ? $_POST['nilai_uts'] : "";
-$nilai_uas = isset($_POST['nilai_uas']) ? $_POST['nilai_uas'] : "";
-$praktikum = isset($_POST['nilai_praktikum']) ? $_POST['nilai_praktikum'] : "";
+    $proses = isset($_POST['proses']) ? $_POST['proses'] : "simpan";
+    $nama = isset($_POST['nama']) ? $_POST['nama'] : "";
+    $matkul = isset($_POST['matkul']) ? $_POST['matkul'] : "";
+    $nilai_uts = isset($_POST['nilai_uts']) ? $_POST['nilai_uts'] : "";
+    $nilai_uas = isset($_POST['nilai_uas']) ? $_POST['nilai_uas'] : "";
+    $praktikum = isset($_POST['nilai_praktikum']) ? $_POST['nilai_praktikum'] : "";
 
+$total = (0.3 * floatval($nilai_uts)) + (0.35 * floatval($nilai_uas)) + (0.35 * floatval($praktikum));
 
-$total = (0.3 * $nilai_uts) + (0.35 * $nilai_uas) + (0.35 * $praktikum);
-
-// <!-- SISWA DINYATAKAN LULUS JIKA NILAI TOTAL dengan presentase 30% UTS, 35% UAS dan
-// TUGAS 35% melebihi 55, buatlah tampilan programnya !!. -->
-
-function syaratLulus($nilai){
-    $kelulusan = 'Lulus';
-    if ($nilai > 55){
+    if ($total > 55){
         $kelulusan = 'Lulus';
     }
     else{
         $kelulusan = 'Tidak Lulus';
     }
-    return $kelulusan;
-}
 
-function rangeNilai($range){
-    if ($total >= 85 AND $total <= 100){
-        $range = "A";
+    switch(true){
+        case($total >= 85 AND $total <= 100):
+            $range = 'A';
+            $predikat = 'Sangat Memuaskan';
+            break;
+        case($total >= 70 AND $total <= 84):
+            $range = 'B';
+            $predikat = 'Memuaskan';
+            break;
+        case($total >= 56 AND $total <= 69):
+            $range = 'C';
+            $predikat = 'Cukup';
+            break;
+        case($total >= 36 AND $total <= 55):
+            $range = 'D';
+            $predikat = 'Kurang';
+            break;
+        case($total >= 0 AND $total <= 35):
+            $range = 'E';
+            $predikat = 'Sangat Kurang';
+            break;
+        case($total >= 85 AND $total <= 100):
+            $range = 'A';
+            $predikat = 'Sangat Memuaskan';
+            break;
+        default:
+            $range = 'I';
+            $predikat = 'Tidak Ada';
+            break;
     }
-    elseif ($total >= 85 AND $total <= 100){
-        $range = "A";
-    }
-    elseif ($total >= 70 AND $total <= 84){
-        $range = "B";
-    }
-    elseif ($total >= 56 AND $total <= 69){
-        $range = "C";
-    }
-    elseif ($total >= 36 AND $total <= 55){
-        $range = "D";
-    }
-    elseif ($total >= 0 AND $total <= 35){
-        $range = "E";
-    }
-}
 
 if(!empty($proses)){
-    echo 'Proses :'.$proses;
+    echo 'Proses :'.$proses . "<br>";
     echo "Nama Siswa   : " . htmlspecialchars($nama) . "<br>";
     echo "Nama Mata Kuliah   : " . htmlspecialchars($matkul) . "<br>";
     echo "Nilai UTS  : " . htmlspecialchars($nilai_uts) . "<br>";
     echo "Nilai UAS  : " . htmlspecialchars($nilai_uas) . "<br>";
     echo "Nilai Tugas/Praktikum  : " . htmlspecialchars($praktikum) . "<br>";
+    echo "Status Kelulusan       : " . htmlspecialchars($kelulusan) . "<br>";
+    echo "Grade       : " . htmlspecialchars($range) . "<br>";
+    echo "Predikat       : " . htmlspecialchars($predikat) . "<br>";
 }
 ?>
-
-<!-- No Range Nilai Grade
-1 0 s/d 35 E
-2 36 s/d 55 D
-3 56 s/d 69 C
-4 70 s/d 84 B
-5 85 s/d 100 A
-6 Kurang dari 0, atau lebih besar dari 100 I -->
-
-<!-- Berdasarkan aturan predikat grade dibawah ini, cetaklah grade dari nilai ujian siswa
-dengan menggunakan syntax SWITCH.
-No Grade Predikat
-1 E Sangat Kurang
-2 D Kurang
-3 C Cukup
-4 B Memuaskan
-5 A Sangat Memuaskan
-6 I Tidak Ada -->
 </body>
 </html>
